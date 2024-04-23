@@ -8,10 +8,21 @@ include_once "config.php";
 $claveEncriptada = password_hash("admin123", PASSWORD_DEFAULT);
 
 //Es postback?
-  //Si el usuario es admin y la clave es admin123:
+if ($_POST) {
+  $usuario = $_POST["txtUsuario"];
+  $clave = $_POST["txtClave"];
+
+  if (isset($usuario, $clave) && $usuario == "admin" && password_verify($clave, $claveEncriptada)) {
+    //Si el usuario es admin y la clave es admin123:
     //Creamos una variable de session llamada nombre y tenga de valor tu nombre"
+    $_SESSION["nombre"] = "Luana";
     //y Redireccionamos al index
-  //Si no es correcto la clave o el usuario mostrar en pantalla "Usuario o clave incorrecto"
+    header("Location: index.php");
+  } else {
+    //Si no es correcto la clave o el usuario mostrar en pantalla "Usuario o clave incorrecto"
+    $msg = "Usuario o clave incorrecto";
+  }
+}
 
 
 ?>
