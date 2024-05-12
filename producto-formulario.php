@@ -3,6 +3,7 @@
 include_once "config.php";
 include_once "entidades/tipoproducto.php";
 include_once "entidades/producto.php";
+include_once "entidades/venta.php";
 
 $pg = "Listado de productos";
 
@@ -47,11 +48,17 @@ if ($_POST) {
         $msg["texto"] = "Guardado correctamente";
         $msg["codigo"] = "alert-success";
     } else if (isset($_POST["btnBorrar"])) {
-        // NOTE: cargando desde DB solo para eliminar la imagen?
-        $producto->obtenerPorId();
-        $producto->eliminarImagen();
-        $producto->eliminar();
-        header("Location: producto-listado.php");
+        $venta = new Venta();
+        if ($venta->obtenerVentasPorProducto($producto->idproducto)) {
+            $msg["texto"] = "No se puede eliminar un producto con ventas asociadas.";
+            $msg["codigo"] = "alert-danger";
+        } else {
+            // NOTE: cargando desde DB solo para eliminar la imagen?
+            $producto->obtenerPorId();
+            $producto->eliminarImagen();
+            $producto->eliminar();
+            header("Location: producto-listado.php");
+        }
     }
 }
 

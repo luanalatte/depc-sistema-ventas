@@ -152,6 +152,56 @@ class Venta {
         return $aResultado;
     }
 
+    public function obtenerVentasPorCliente($idcliente) {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+
+        $sql = "SELECT 
+                    idventa
+                FROM ventas
+                WHERE fk_idcliente = $idcliente";
+
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        $aResultado = array();
+        if($resultado){
+
+            while($fila = $resultado->fetch_assoc()){
+                $entidadAux = new Venta();
+                $entidadAux->idventa = $fila["idventa"];
+                $aResultado[] = $entidadAux;
+            }
+        }
+
+        return $aResultado;
+    }
+
+    public function obtenerVentasPorProducto($idproducto) {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+
+        $sql = "SELECT 
+                    idventa
+                FROM ventas
+                WHERE fk_idproducto = $idproducto";
+
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        $aResultado = array();
+        if($resultado){
+
+            while($fila = $resultado->fetch_assoc()){
+                $entidadAux = new Venta();
+                $entidadAux->idventa = $fila["idventa"];
+                $aResultado[] = $entidadAux;
+            }
+        }
+
+        return $aResultado;
+    }
+
 }
 
 ?>
