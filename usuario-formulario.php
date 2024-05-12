@@ -1,6 +1,34 @@
 <?php
-include_once "header.php";
 
+include_once "config.php";
+include_once "entidades/usuario.php";
+
+$pg = "Listado de usuarios";
+
+$usuario = new Usuario();
+$usuario->cargarFormulario($_REQUEST);
+
+if ($_POST) {
+    if (isset($_POST["btnGuardar"])) {
+        if (isset($_GET["id"]) && $_GET["id"] > 0) {
+            $usuario->actualizar();
+        } else {
+            $usuario->insertar();
+        }
+
+        $msg["texto"] = "Guardado correctamente";
+        $msg["codigo"] = "alert-success";
+    } else if (isset($_POST["btnBorrar"])) {
+        $usuario->eliminar();
+        header("Location: usuario-listado.php");
+    }
+}
+
+if (isset($_GET["id"]) && $_GET["id"] > 0) {
+    $usuario->obtenerPorId();
+}
+
+include_once "header.php";
 ?>
         <!-- Begin Page Content -->
         <div class="container-fluid">
@@ -27,23 +55,23 @@ include_once "header.php";
             <div class="row">
                 <div class="col-6 form-group">
                     <label for="txtUsuario">Usuario:</label>
-                    <input type="text" required class="form-control" name="txtUsuario" id="txtUsuario" value="">
+                    <input type="text" required class="form-control" name="txtUsuario" id="txtUsuario" value="<?= $usuario->usuario ?>">
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtNombre">Nombre:</label>
-                    <input type="text" required class="form-control" name="txtNombre" id="txtNombre" value="">
+                    <input type="text" required class="form-control" name="txtNombre" id="txtNombre" value="<?= $usuario->nombre ?>">
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtApellido">Apellido:</label>
-                    <input type="text" required class="form-control" name="txtApellido" id="txtApellido" value="">
+                    <input type="text" required class="form-control" name="txtApellido" id="txtApellido" value="<?= $usuario->apellido ?>">
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtCorreo">Correo:</label>
-                    <input type="mail" required class="form-control" name="txtCorreo" id="txtCorreo" value="">
+                    <input type="mail" required class="form-control" name="txtCorreo" id="txtCorreo" value="<?= $usuario->correo ?>">
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtClave">Clave:</label>
-                    <input type="password" required class="form-control" name="txtClave" id="txtClave" value="">
+                    <input type="password" required class="form-control" name="txtClave" id="txtClave" value="<?= $usuario->clave ?>">
                 </div>
             </div>
 

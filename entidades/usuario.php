@@ -18,6 +18,15 @@ class Usuario {
         $this->$atributo = $valor;
     }
 
+    public function cargarFormulario($request) {
+        $this->idusuario = $request["id"] ?? "";
+        $this->usuario = $request["txtUsuario"] ?? "";
+        $this->clave = $request["txtClave"] ?? "";
+        $this->nombre = $request["txtNombre"] ?? "";
+        $this->apellido = $request["txtApellido"] ?? "";
+        $this->correo = $request["txtCorreo"] ?? "";
+    }
+
     public function insertar() {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "INSERT INTO usuarios (
