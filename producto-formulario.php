@@ -26,14 +26,15 @@ if ($_POST) {
         }
 
         if (isset($_GET["id"]) && $_GET["id"] > 0) {
+            // NOTE: cargando desde DB solo para eliminar la imagen?
+            $productoOld = new Producto();
+            $productoOld->idproducto = $producto->idproducto;
+            $productoOld->obtenerPorId();
             if (isset($nombreImagen)) {
-                // NOTE: cargando desde DB solo para eliminar la imagen?
-                $productoOld = new Producto();
-                $productoOld->idproducto = $producto->idproducto;
-                $productoOld->obtenerPorId();
                 $productoOld->eliminarImagen();
-
                 $producto->imagen = $nombreImagen;
+            } else {
+                $producto->imagen = $productoOld->imagen;
             }
 
             $producto->actualizar();
