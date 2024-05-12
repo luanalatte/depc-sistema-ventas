@@ -149,6 +149,7 @@ class Producto {
             }
         }
 
+        $mysqli->close();
         return $aResultado;
     }
 

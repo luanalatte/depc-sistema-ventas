@@ -150,6 +150,8 @@ class Venta {
         }
 
         return $aResultado;
+
+        $mysqli->close();
     }
 
     public function obtenerVentasPorCliente($idcliente) {
@@ -174,6 +176,7 @@ class Venta {
             }
         }
 
+        $mysqli->close();
         return $aResultado;
     }
 
@@ -199,6 +202,7 @@ class Venta {
             }
         }
 
+        $mysqli->close();
         return $aResultado;
     }
 

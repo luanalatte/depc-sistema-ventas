@@ -104,6 +104,7 @@ class TipoProducto {
             }
         }
 
+        $mysqli->close();
         return $aResultado;
     }
 
