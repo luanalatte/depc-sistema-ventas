@@ -4,7 +4,7 @@ class Venta {
     private $idventa;
     private $fk_idcliente;
     private $fk_idproducto;
-    private $fecha;
+    private $fecha_hora;
     private $cantidad;
     private $preciounitario;
     private $total;
@@ -19,19 +19,34 @@ class Venta {
         $this->$atributo = $valor;
     }
 
+    public function cargarFormulario($request) {
+        $this->idventa = $request["id"] ?? "";
+        $this->fk_idcliente = $request["lstCliente"] ?? "";
+        $this->fk_idproducto = $request["lstProducto"] ?? "";
+        if (isset($request["txtFechaDia"], $request["txtFechaMes"], $request["txtFechaAnio"])) {
+            $this->fecha_hora = $request["txtFechaAnio"] . "-" . $request["txtFechaMes"] . "-" . $request["txtFechaDia"];
+            if (isset($request["txtHora"])) {
+                $this->fecha_hora .= " " . date_format(date_create($request["txtHora"]), "H:i");
+            }
+        }
+        $this->cantidad = $request["txtCantidad"] ?? "";
+        $this->preciounitario = $request["txtPrecioUnitario"] ?? "";
+        $this->total = $request["txtTotal"] ?? "";
+    }
+
     public function insertar() {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "INSERT INTO ventas (
                     fk_idcliente,
                     fk_idproducto,
-                    fecha,
+                    fecha_hora,
                     cantidad,
                     preciounitario,
                     total
                 ) VALUES (
                     '$this->fk_idcliente',
                     '$this->fk_idproducto',
-                    '$this->fecha',
+                    '$this->fecha_hora',
                     '$this->cantidad',
                     '$this->preciounitario',
                     '$this->total'
@@ -51,7 +66,7 @@ class Venta {
         $sql = "UPDATE ventas SET
                 fk_idcliente = '" . $this->fk_idcliente . "',
                 fk_idproducto = '" . $this->fk_idproducto . "',
-                fecha = '" . $this->fecha . "',
+                fecha_hora = '" . $this->fecha_hora . "',
                 cantidad = '" . $this->cantidad . "',
                 preciounitario =  '" . $this->preciounitario . "',
                 total =  '" . $this->total . "'
@@ -80,7 +95,7 @@ class Venta {
         $this->idventa = $fila["idventa"];
         $this->fk_idcliente = $fila["fk_idcliente"];
         $this->fk_idproducto = $fila["fk_idproducto"];
-        $this->fecha = $fila["fecha"];
+        $this->fecha_hora = $fila["fecha_hora"];
         $this->cantidad = $fila["cantidad"];
         $this->preciounitario = $fila["preciounitario"];
         $this->total = $fila["total"];
@@ -91,7 +106,7 @@ class Venta {
         $sql = "SELECT idventa,
                         fk_idcliente,
                         fk_idproducto,
-                        fecha,
+                        fecha_hora,
                         cantidad,
                         preciounitario,
                         total
@@ -114,7 +129,7 @@ class Venta {
                     idventa,
                     fk_idcliente,
                     fk_idproducto,
-                    fecha,
+                    fecha_hora,
                     cantidad,
                     preciounitario,
                     total

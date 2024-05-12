@@ -1,6 +1,8 @@
 <?php
 
 include_once "config.php";
+include_once "entidades/producto.php";
+include_once "entidades/cliente.php";
 include_once "entidades/venta.php";
 
 $pg = "Listado de ventas";
@@ -30,15 +32,23 @@ include_once("header.php");
                 <th>Total</th>
                 <th>Acciones</th>
             </tr>
-            <?php foreach ($aVentas as $venta): ?>
+            <?php foreach ($aVentas as $venta):
+                $producto = new Producto();
+                $producto->idproducto = $venta->fk_idproducto;
+                $producto->obtenerPorId();
+                
+                $cliente = new Cliente();
+                $cliente->idcliente = $venta->fk_idcliente;
+                $cliente->obtenerPorId();
+              ?>
               <tr>
-                  <td><?php echo $venta->fecha; ?></td>
-                  <td><?php echo $venta->cantidad; ?></td>
-                  <td><?php echo $venta->producto; ?></td>
-                  <td><?php echo $venta->cliente; ?></td>
-                  <td><?php echo $venta->total; ?></td>
+                  <td><?= date_format(date_create($venta->fecha_hora), "d/m/Y H:i"); ?></td>
+                  <td><?= $venta->cantidad; ?></td>
+                  <td><?= $producto->nombre; ?></td>
+                  <td><?= $cliente->nombre; ?></td>
+                  <td><?= $venta->total; ?></td>
                   <td style="width: 110px;">
-                      <a href="venta-formulario.php?id=<?php echo $venta->idventa; ?>"><i class="fas fa-search"></i></a>   
+                      <a href="venta-formulario.php?id=<?= $venta->idventa; ?>"><i class="fas fa-search"></i></a>   
                   </td>
               </tr>
             <?php endforeach; ?>
