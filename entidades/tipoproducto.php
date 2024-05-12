@@ -14,12 +14,17 @@ class TipoProducto {
         $this->$atributo = $valor;
     }
 
-    public function insertar() {
+    public function cargarFormulario($request) {
+        $this->idtipoproducto = $request["id"] ?? "";
+        $this->nombre = $request["txtNombre"] ?? "";
+    }
+
+    public function insertar(){
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "INSERT INTO tipo_productos (
                     nombre
                 ) VALUES (
-                    '$this->nombre',
+                    '$this->nombre'
                 );";        
         // print_r($sql);exit;
 
