@@ -19,6 +19,21 @@ class Producto {
         $this->$atributo = $valor;
     }
 
+    public function eliminarImagen() {
+        if ($this->imagen && file_exists("img/productos/$this->imagen")) {
+            unlink("img/productos/$this->imagen");
+        }
+    }
+
+    public function cargarFormulario($request) {
+        $this->idproducto = $request["id"] ?? "";
+        $this->nombre = $request["txtNombre"] ?? "";
+        $this->cantidad = $request["txtCantidad"] ?? "";
+        $this->precio = $request["txtPrecio"] ?? "";
+        $this->descripcion = $request["txtDescripcion"] ?? "";
+        $this->fk_idtipoproducto = $request["lstTipoProducto"] ?? "";
+    }
+
     public function insertar() {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "INSERT INTO productos (

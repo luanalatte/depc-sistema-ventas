@@ -31,7 +31,12 @@ include_once("header.php");
             </tr>
             <?php foreach ($aProductos as $producto): ?>
               <tr>
-                  <td><?php echo $producto->imagen; ?></td>
+                  <td>
+                    <?php if($producto->imagen): ?>
+                      <img width="100" src="img/productos/<?= $producto->imagen ?>">
+                    <?php endif; ?>
+                  </td>
+
                   <td><?php echo $producto->nombre; ?></td>
                   <td><?php echo $producto->cantidad; ?></td>
                   <td><?php echo $producto->precio; ?></td>

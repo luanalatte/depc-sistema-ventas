@@ -1,6 +1,68 @@
 <?php
-include_once "header.php";
 
+include_once "config.php";
+include_once "entidades/tipoproducto.php";
+include_once "entidades/producto.php";
+
+$pg = "Listado de productos";
+
+$producto = new Producto();
+$producto->cargarFormulario($_REQUEST);
+
+if ($_POST) {
+    if (isset($_POST["btnGuardar"])) {
+        if (isset($_FILES["fileImagen"]) && $_FILES["fileImagen"]["error"] == UPLOAD_ERR_OK) {
+
+            $mime = mime_content_type($_FILES["fileImagen"]["tmp_name"]);
+            $ext = strtolower(pathinfo($_FILES["fileImagen"]["name"], PATHINFO_EXTENSION));
+            // if ($ext == "jpg" || $ext == "jpeg" || $ext == "png") {
+            if (str_starts_with($mime, "image/")) {
+                $nombreImagen = date("Ymdhmsi") . rand(1000, 9999) . "." . $ext;
+                if (!move_uploaded_file($_FILES["fileImagen"]["tmp_name"], "img/productos/$nombreImagen")) {
+                    unset($nombreImagen);
+                }
+            }
+        }
+
+        if (isset($_GET["id"]) && $_GET["id"] > 0) {
+            if (isset($nombreImagen)) {
+                // NOTE: cargando desde DB solo para eliminar la imagen?
+                $productoOld = new Producto();
+                $productoOld->idproducto = $producto->idproducto;
+                $productoOld->obtenerPorId();
+                $productoOld->eliminarImagen();
+
+                $producto->imagen = $nombreImagen;
+            }
+
+            $producto->actualizar();
+        } else {
+            if (isset($nombreImagen)) {
+                $producto->imagen = $nombreImagen;
+            }
+
+            $producto->insertar();
+        }
+
+        $msg["texto"] = "Guardado correctamente";
+        $msg["codigo"] = "alert-success";
+    } else if (isset($_POST["btnBorrar"])) {
+        // NOTE: cargando desde DB solo para eliminar la imagen?
+        $producto->obtenerPorId();
+        $producto->eliminarImagen();
+        $producto->eliminar();
+        header("Location: producto-listado.php");
+    }
+}
+
+if (isset($_GET["id"]) && $_GET["id"] > 0) {
+    $producto->obtenerPorId();
+}
+
+$tipoproducto = new TipoProducto();
+$aTipoProductos = $tipoproducto->obtenerTodos();
+
+include_once "header.php";
 ?>
         <!-- Begin Page Content -->
         <div class="container-fluid">
@@ -27,25 +89,28 @@ include_once "header.php";
             <div class="row">
                 <div class="col-6 form-group">
                     <label for="txtNombre">Nombre:</label>
-                    <input type="text" required class="form-control" name="txtNombre" id="txtNombre" value="">
+                    <input type="text" required class="form-control" name="txtNombre" id="txtNombre" value="<?= $producto->nombre ?>">
                 </div>
                 <div class="col-6 form-group">
                     <label for="lstTipoProducto">Tipo de producto:</label>
                     <select class="form-control" name="lstTipoProducto" id="lstTipoProducto">
                         <option value="" selected disabled>Seleccionar</option>
+                        <?php foreach($aTipoProductos as $tipo): ?>
+                            <option value="<?= $tipo->idtipoproducto ?>"<?= $tipo->idtipoproducto == $producto->fk_idtipoproducto ? " selected" : "" ?>><?= $tipo->nombre ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtCantidad">Cantidad:</label>
-                    <input type="number" required class="form-control" name="txtCantidad" id="txtCantidad" value="">
+                    <input type="number" required class="form-control" name="txtCantidad" id="txtCantidad" value="<?= $producto->cantidad ?>">
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtPrecio">Precio:</label>
-                    <input type="number" required class="form-control" name="txtPrecio" id="txtPrecio" value="">
+                    <input type="number" required class="form-control" name="txtPrecio" id="txtPrecio" value="<?= $producto->precio ?>">
                 </div>
                 <div class="col-12 form-group">
                     <label for="txtDescripcion">Descripción:</label>
-                    <textarea name="txtDescripcion" id="txtDescripcion" class="form-control"></textarea>
+                    <textarea name="txtDescripcion" id="txtDescripcion" class="form-control"><?= $producto->descripcion ?></textarea>
                     <script>
                     ClassicEditor
                         .create( document.querySelector( '#txtDescripcion' ) )
@@ -57,7 +122,9 @@ include_once "header.php";
                 <div class="col-6 form-group">
                     <label for="fileImagen">Imagen:</label>
                     <input type="file" name="fileImagen" id="fileImagen" accept="image/*">
-                    <!-- <img src=""> -->
+                    <?php if($producto->imagen): ?>
+                        <img width="100" src="img/productos/<?= $producto->imagen ?>">
+                    <?php endif; ?>
                 </div>
             </div>
 
