@@ -34,8 +34,8 @@ include_once("header.php");
               <tr>
                   <td><?= date_format(date_create($venta->fecha_hora), "d/m/Y H:i"); ?></td>
                   <td><?= $venta->cantidad; ?></td>
-                  <td><?= $venta->nombre_producto; ?></td>
-                  <td><?= $venta->nombre_cliente; ?></td>
+                  <td><a href="producto-formulario.php?id=<?= $venta->fk_idproducto ?>"><?= $venta->nombre_producto ?></a></td>
+                  <td><a href="cliente-formulario.php?id=<?= $venta->fk_idcliente ?>"><?= $venta->nombre_cliente ?></a></td>
                   <td><?= $venta->total; ?></td>
                   <td style="width: 110px;">
                       <a href="venta-formulario.php?id=<?= $venta->idventa; ?>"><i class="fas fa-search"></i></a>   
