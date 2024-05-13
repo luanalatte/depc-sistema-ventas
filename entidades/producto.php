@@ -153,6 +153,32 @@ class Producto {
         return $aResultado;
     }
 
+    public function obtenerProductosPorTipo($idtipoproducto) {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+
+        $sql = "SELECT 
+                    idproducto
+                FROM productos
+                WHERE fk_idtipoproducto = $idtipoproducto";
+
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        $aResultado = array();
+        if($resultado){
+
+            while($fila = $resultado->fetch_assoc()){
+                $entidadAux = new Producto();
+                $entidadAux->idproducto = $fila["idproducto"];
+                $aResultado[] = $entidadAux;
+            }
+        }
+
+        $mysqli->close();
+        return $aResultado;
+    }
+
 }
 
 ?>
