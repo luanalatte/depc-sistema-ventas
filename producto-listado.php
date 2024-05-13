@@ -33,7 +33,7 @@ include_once("header.php");
               <tr>
                   <td>
                     <?php if($producto->imagen): ?>
-                      <img width="100" src="img/productos/<?= $producto->imagen ?>">
+                      <img class="img-thumbnail" src="img/productos/<?= $producto->imagen ?>">
                     <?php endif; ?>
                   </td>
 

@@ -129,9 +129,9 @@ include_once "header.php";
                 </div>
                 <div class="col-6 form-group">
                     <label for="fileImagen">Imagen:</label>
-                    <input type="file" name="fileImagen" id="fileImagen" accept="image/*">
+                    <input class="form-control mb-2" type="file" name="fileImagen" id="fileImagen" accept="image/*">
                     <?php if($producto->imagen): ?>
-                        <img width="100" src="img/productos/<?= $producto->imagen ?>">
+                        <img class="img-thumbnail" src="img/productos/<?= $producto->imagen ?>">
                     <?php endif; ?>
                 </div>
             </div>
