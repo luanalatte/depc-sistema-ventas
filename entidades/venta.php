@@ -9,6 +9,9 @@ class Venta {
     private $preciounitario;
     private $total;
 
+    private $nombre_cliente;
+    private $nombre_producto;
+
     // public function __construct() {}
 
     public function __get($atributo) {
@@ -145,6 +148,43 @@ class Venta {
             while($fila = $resultado->fetch_assoc()){
                 $entidadAux = new Venta();
                 $entidadAux->construirDesdeFila($fila);
+                $aResultado[] = $entidadAux;
+            }
+        }
+
+        $mysqli->close();
+        return $aResultado;
+    }
+
+    public function obtenerGrilla() {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+        $sql = "SELECT 
+                    ventas.idventa,
+                    ventas.fk_idcliente,
+                    clientes.nombre AS nombre_cliente,
+                    ventas.fk_idproducto,
+                    productos.nombre AS nombre_producto,
+                    ventas.fecha_hora,
+                    ventas.cantidad,
+                    ventas.preciounitario,
+                    ventas.total
+                FROM ventas
+                INNER JOIN clientes ON ventas.fk_idcliente = clientes.idcliente
+                INNER JOIN productos ON ventas.fk_idproducto = productos.idproducto
+                ORDER BY ventas.fecha_hora DESC";
+
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        $aResultado = array();
+        if($resultado){
+
+            while($fila = $resultado->fetch_assoc()){
+                $entidadAux = new Venta();
+                $entidadAux->construirDesdeFila($fila);
+                $entidadAux->nombre_cliente = $fila["nombre_cliente"];
+                $entidadAux->nombre_producto = $fila["nombre_producto"];
                 $aResultado[] = $entidadAux;
             }
         }

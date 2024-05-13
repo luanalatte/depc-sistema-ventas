@@ -1,14 +1,12 @@
 <?php
 
 include_once "config.php";
-include_once "entidades/producto.php";
-include_once "entidades/cliente.php";
 include_once "entidades/venta.php";
 
 $pg = "Listado de ventas";
 
 $venta = new Venta();
-$aVentas = $venta->obtenerTodos();
+$aVentas = $venta->obtenerGrilla();
 
 include_once("header.php"); 
 
@@ -32,20 +30,12 @@ include_once("header.php");
                 <th>Total</th>
                 <th>Acciones</th>
             </tr>
-            <?php foreach ($aVentas as $venta):
-                $producto = new Producto();
-                $producto->idproducto = $venta->fk_idproducto;
-                $producto->obtenerPorId();
-                
-                $cliente = new Cliente();
-                $cliente->idcliente = $venta->fk_idcliente;
-                $cliente->obtenerPorId();
-              ?>
+            <?php foreach ($aVentas as $venta): ?>
               <tr>
                   <td><?= date_format(date_create($venta->fecha_hora), "d/m/Y H:i"); ?></td>
                   <td><?= $venta->cantidad; ?></td>
-                  <td><?= $producto->nombre; ?></td>
-                  <td><?= $cliente->nombre; ?></td>
+                  <td><?= $venta->nombre_producto; ?></td>
+                  <td><?= $venta->nombre_cliente; ?></td>
                   <td><?= $venta->total; ?></td>
                   <td style="width: 110px;">
                       <a href="venta-formulario.php?id=<?= $venta->idventa; ?>"><i class="fas fa-search"></i></a>   
