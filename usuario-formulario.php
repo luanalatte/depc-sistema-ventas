@@ -71,7 +71,7 @@ include_once "header.php";
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtClave">Clave:</label>
-                    <input type="password" required class="form-control" name="txtClave" id="txtClave" value="<?= $usuario->clave ?>">
+                    <input type="password" required class="form-control" name="txtClave" id="txtClave" value="">
                 </div>
             </div>
 

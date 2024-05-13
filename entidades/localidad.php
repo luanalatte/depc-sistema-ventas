@@ -38,6 +38,7 @@ class Localidad{
                 "cod_postal" => $fila["cod_postal"]);
        
         }
+        $mysqli->close();
         return $aLocalidades;
     }
 

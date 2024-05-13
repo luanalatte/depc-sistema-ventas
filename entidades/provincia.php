@@ -40,6 +40,8 @@ class Provincia
 
             }
         }
+
+        $mysqli->close();
         return $aResultado;
     }
 

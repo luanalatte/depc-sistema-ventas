@@ -106,14 +106,7 @@ if ($_POST) {
                   Cuenta
                 </a>
                 <div class="dropdown-divider"></div>
-                <form action="" method="post">
-                  <button type="submit" class="dropdown-item" name="btnCerrar">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Cerrar sesión
-                  </button>
-                </form>
-                <!-- <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                </a> -->
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Cerrar sesión</a>
               </div>
             </li>
 
