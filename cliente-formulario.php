@@ -87,7 +87,7 @@ include_once "header.php";
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtTelefono">Teléfono:</label>
-                    <input type="number" class="form-control" name="txtTelefono" id="txtTelefono" value="<?php echo $cliente->telefono ?>">
+                    <input type="tel" class="form-control" name="txtTelefono" id="txtTelefono" value="<?php echo $cliente->telefono ?>">
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtFechaNac" class="d-block">Fecha de nacimiento:</label>
