@@ -212,6 +212,25 @@ class Venta {
         return $facturacion;
     }
 
+    public static function obtenerFacturacionAnual($anio) {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+        $sql = "SELECT SUM(total) AS sum
+                FROM ventas
+                WHERE YEAR(fecha_hora) = '$anio';";
+
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        $facturacion = 0;
+        if ($fila = $resultado->fetch_assoc()) {
+            $facturacion = $fila["sum"] > 0 ? $fila["sum"] : 0;
+        }
+
+        $mysqli->close();
+        return $facturacion;
+    }
+
     public static function obtenerFacturacionPorPeriodo($fechaDesde, $fechaHasta) {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "SELECT SUM(total) AS sum

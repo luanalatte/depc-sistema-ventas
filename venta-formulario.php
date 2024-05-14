@@ -5,7 +5,7 @@ include_once "entidades/cliente.php";
 include_once "entidades/producto.php";
 include_once "entidades/venta.php";
 
-$pg = "Listado de ventas";
+$pg = "Edición de venta";
 
 $venta = new Venta();
 $venta->cargarFormulario($_REQUEST);

@@ -3,7 +3,7 @@
 include_once "config.php";
 include_once "entidades/usuario.php";
 
-$pg = "Listado de usuarios";
+$pg = "Edición de usuario";
 
 $usuario = new Usuario();
 $usuario->cargarFormulario($_REQUEST);

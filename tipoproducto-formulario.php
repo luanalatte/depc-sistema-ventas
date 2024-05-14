@@ -4,7 +4,7 @@ include_once "config.php";
 include_once "entidades/tipoproducto.php";
 include_once "entidades/producto.php";
 
-$pg = "Listado de tipo de productos";
+$pg = "Edición de tipo de producto";
 
 $tipoproducto = new TipoProducto();
 $tipoproducto->cargarFormulario($_REQUEST);
