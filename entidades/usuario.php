@@ -18,10 +18,24 @@ class Usuario {
         $this->$atributo = $valor;
     }
 
+    public function encriptarClave($clave) {
+        return password_hash($clave, PASSWORD_DEFAULT);
+    }
+
+    public function verificarClave($claveIngresada, $claveEnBDDD) {
+        if (!$claveIngresada || !$claveEnBDDD) {
+            return False;
+        }
+
+        return password_verify($claveIngresada, $claveEnBDDD);
+    }
+
     public function cargarFormulario($request) {
         $this->idusuario = $request["id"] ?? "";
         $this->usuario = $request["txtUsuario"] ?? "";
-        $this->clave = $request["txtClave"] ?? "";
+        if (isset($request["txtClave"]) && $request["txtClave"]) {
+            $this->clave = $this->encriptarClave($request["txtClave"]);
+        }
         $this->nombre = $request["txtNombre"] ?? "";
         $this->apellido = $request["txtApellido"] ?? "";
         $this->correo = $request["txtCorreo"] ?? "";
@@ -88,6 +102,27 @@ class Usuario {
         $this->nombre = $fila["nombre"];
         $this->apellido = $fila["apellido"];
         $this->correo = $fila["correo"];
+    }
+
+    public function obtenerPorNombreDeUsuario() {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+        $sql = "SELECT idusuario,
+                        usuario,
+                        clave,
+                        nombre,
+                        apellido,
+                        correo
+                FROM usuarios
+                WHERE usuario = '$this->usuario';";
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        if ($fila = $resultado->fetch_assoc()) {
+            $this->construirDesdeFila($fila);
+        }
+
+        $mysqli->close();
     }
 
     public function obtenerPorId() {

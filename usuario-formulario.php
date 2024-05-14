@@ -12,12 +12,18 @@ if ($_POST) {
     if (isset($_POST["btnGuardar"])) {
         if (isset($_GET["id"]) && $_GET["id"] > 0) {
             $usuario->actualizar();
+            $msg["texto"] = "Guardado correctamente";
+            $msg["codigo"] = "alert-success";
         } else {
-            $usuario->insertar();
+            if (isset($_POST["txtClave"]) && $_POST["txtClave"]) {
+                $usuario->insertar();
+                $msg["texto"] = "Guardado correctamente";
+                $msg["codigo"] = "alert-success";
+            } else {
+                $msg["texto"] = "Algo salió mal. Por favor verifica los datos.";
+                $msg["codigo"] = "alert-danger";
+            }
         }
-
-        $msg["texto"] = "Guardado correctamente";
-        $msg["codigo"] = "alert-success";
     } else if (isset($_POST["btnBorrar"])) {
         $usuario->eliminar();
         header("Location: usuario-listado.php");
@@ -71,7 +77,11 @@ include_once "header.php";
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtClave">Clave:</label>
-                    <input type="password" required class="form-control" name="txtClave" id="txtClave" value="">
+                    <?php if(isset($_GET["id"]) && $_GET["id"] > 0): ?>
+                        <input type="password" class="form-control" name="txtClave" id="txtClave" value="" placeholder="Ingrese un valor para modificar la clave existente">
+                    <?php else: ?>
+                        <input type="password" required class="form-control" name="txtClave" id="txtClave" value="">
+                    <?php endif; ?>
                 </div>
             </div>
 
