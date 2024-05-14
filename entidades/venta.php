@@ -193,6 +193,44 @@ class Venta {
         return $aResultado;
     }
 
+    public static function obtenerFacturacionMensual($mes, $anio) {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+        $sql = "SELECT SUM(total) AS sum
+                FROM ventas
+                WHERE MONTH(fecha_hora) = '$mes' AND YEAR(fecha_hora) = '$anio';";
+
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        $facturacion = 0;
+        if ($fila = $resultado->fetch_assoc()) {
+            $facturacion = $fila["sum"] > 0 ? $fila["sum"] : 0;
+        }
+
+        $mysqli->close();
+        return $facturacion;
+    }
+
+    public static function obtenerFacturacionPorPeriodo($fechaDesde, $fechaHasta) {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+        $sql = "SELECT SUM(total) AS sum
+                FROM ventas
+                WHERE fecha_hora >= '$fechaDesde' AND fecha_hora <= '$fechaHasta 23:59:59';";
+
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        $facturacion = 0;
+        if ($fila = $resultado->fetch_assoc()) {
+            $facturacion = $fila["sum"] > 0 ? $fila["sum"] : 0;
+        }
+
+        $mysqli->close();
+        return $facturacion;
+    }
+
     public function obtenerVentasPorCliente($idcliente) {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
 
