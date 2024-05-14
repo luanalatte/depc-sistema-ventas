@@ -6,27 +6,15 @@ error_reporting(E_ALL);
 include_once "config.php";
 include_once "entidades/usuario.php";
 
-$claveEncriptada = password_hash("admin123", PASSWORD_DEFAULT);
-
-function intentarLogin($nombreUsuario, $claveUsuario) {
-  if (!isset($nombreUsuario, $claveUsuario) || !$nombreUsuario || !$claveUsuario)
-    return False;
-
-  $usuario = new Usuario();
-  $usuario->usuario = $nombreUsuario;
-  $usuario->obtenerPorNombreDeUsuario();
-
-  if ($usuario->verificarClave($claveUsuario, $usuario->clave)) {
-    return $usuario;
-  }
-
-  return False;
-}
-
 //Es postback?
 if ($_POST) {
-  if ($usuario = intentarLogin($_POST["txtUsuario"], $_POST["txtClave"])) {
-    $_SESSION["nombre"] = $usuario->nombre;
+  $txtUsuario = trim($_POST["txtUsuario"] ?? "");
+  $txtClave = trim($_POST["txtClave"] ?? "");
+
+  if (!$txtUsuario || !$txtClave) {
+    $msg = "Ingrese usuario y clave";
+  } else if (($entidadUsario = Usuario::obtenerPorUsuario($txtUsuario)) && $entidadUsario->verificarClave($txtClave)) {
+    $_SESSION["nombre"] = $entidadUsuario->nombre;
     header("Location: index.php");
   } else {
     //Si no es correcto la clave o el usuario mostrar en pantalla "Usuario o clave incorrecto"

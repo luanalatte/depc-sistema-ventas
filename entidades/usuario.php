@@ -22,12 +22,12 @@ class Usuario {
         return password_hash($clave, PASSWORD_DEFAULT);
     }
 
-    public function verificarClave($claveIngresada, $claveEnBDDD) {
-        if (!$claveIngresada || !$claveEnBDDD) {
+    public function verificarClave($claveIngresada) {
+        if (!$claveIngresada || !$this->clave) {
             return False;
         }
 
-        return password_verify($claveIngresada, $claveEnBDDD);
+        return password_verify($claveIngresada, $this->clave);
     }
 
     public function cargarFormulario($request) {
@@ -104,7 +104,7 @@ class Usuario {
         $this->correo = $fila["correo"];
     }
 
-    public function obtenerPorNombreDeUsuario() {
+    public static function obtenerPorUsuario($usuario) {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "SELECT idusuario,
                         usuario,
@@ -113,16 +113,20 @@ class Usuario {
                         apellido,
                         correo
                 FROM usuarios
-                WHERE usuario = '$this->usuario';";
+                WHERE usuario = '$usuario';";
+
         if (!$resultado = $mysqli->query($sql)) {
             printf("Error en query: %s\n", $mysqli->error . " " . $sql);
         }
 
+        $entidad = null;
         if ($fila = $resultado->fetch_assoc()) {
-            $this->construirDesdeFila($fila);
+            $entidad = new Usuario();
+            $entidad->construirDesdeFila($fila);
         }
 
         $mysqli->close();
+        return $entidad;
     }
 
     public function obtenerPorId() {
