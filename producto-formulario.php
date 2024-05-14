@@ -14,10 +14,8 @@ if ($_POST) {
     if (isset($_POST["btnGuardar"])) {
         if (isset($_FILES["fileImagen"]) && $_FILES["fileImagen"]["error"] == UPLOAD_ERR_OK) {
 
-            $mime = mime_content_type($_FILES["fileImagen"]["tmp_name"]);
             $ext = strtolower(pathinfo($_FILES["fileImagen"]["name"], PATHINFO_EXTENSION));
-            // if ($ext == "jpg" || $ext == "jpeg" || $ext == "png") {
-            if (str_starts_with($mime, "image/")) {
+            if (in_array($ext, ["jpg", "jpeg", "png", "webp", "gif"])) {
                 $nombreImagen = date("Ymdhmsi") . rand(1000, 9999) . "." . $ext;
                 if (!move_uploaded_file($_FILES["fileImagen"]["tmp_name"], "img/productos/$nombreImagen")) {
                     unset($nombreImagen);
@@ -127,7 +125,7 @@ include_once "header.php";
                 </div>
                 <div class="col-6 form-group">
                     <label for="fileImagen">Imagen:</label>
-                    <input class="form-control mb-2" type="file" name="fileImagen" id="fileImagen" accept="image/*">
+                    <input class="form-control mb-2" type="file" name="fileImagen" id="fileImagen" accept=".jpg, .jpeg, .png, .webp, .gif">
                     <?php if($producto->imagen): ?>
                         <img class="img-thumbnail" src="img/productos/<?= $producto->imagen ?>">
                     <?php endif; ?>
