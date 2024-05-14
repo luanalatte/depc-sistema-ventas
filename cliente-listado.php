@@ -4,8 +4,7 @@ include_once "config.php";
 include_once "entidades/cliente.php";
 $pg = "Listado de clientes";
 
-$cliente = new Cliente();
-$aClientes = $cliente->obtenerTodos();
+$aClientes = Cliente::obtenerTodos();
 
 include_once("header.php"); 
 ?>

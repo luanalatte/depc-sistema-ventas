@@ -20,8 +20,7 @@ if ($_POST) {
         $msg["texto"] = "Guardado correctamente";
         $msg["codigo"] = "alert-success";
     } else if (isset($_POST["btnBorrar"])) {
-        $producto = new Producto();
-        if ($producto->obtenerProductosPorTipo($tipoproducto->idtipoproducto)) {
+        if (Producto::obtenerProductosPorTipo($tipoproducto->idtipoproducto)) {
             $msg["texto"] = "No se puede eliminar un tipo de producto con producto asociados.";
             $msg["codigo"] = "alert-danger";
         } else {

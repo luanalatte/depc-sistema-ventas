@@ -5,8 +5,7 @@ include_once "entidades/usuario.php";
 
 $pg = "Listado de usuarios";
 
-$usuario = new Usuario();
-$aUsuarios = $usuario->obtenerTodos();
+$aUsuarios = Usuario::obtenerTodos();
 
 include_once("header.php"); 
 

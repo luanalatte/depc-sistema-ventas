@@ -5,8 +5,7 @@ include_once "entidades/venta.php";
 
 $pg = "Listado de ventas";
 
-$venta = new Venta();
-$aVentas = $venta->obtenerGrilla();
+$aVentas = Venta::obtenerGrilla();
 
 include_once("header.php"); 
 

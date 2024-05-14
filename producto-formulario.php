@@ -49,8 +49,7 @@ if ($_POST) {
         $msg["texto"] = "Guardado correctamente";
         $msg["codigo"] = "alert-success";
     } else if (isset($_POST["btnBorrar"])) {
-        $venta = new Venta();
-        if ($venta->obtenerVentasPorProducto($producto->idproducto)) {
+        if (Venta::obtenerVentasPorProducto($producto->idproducto)) {
             $msg["texto"] = "No se puede eliminar un producto con ventas asociadas.";
             $msg["codigo"] = "alert-danger";
         } else {
@@ -67,8 +66,7 @@ if (isset($_GET["id"]) && $_GET["id"] > 0) {
     $producto->obtenerPorId();
 }
 
-$tipoproducto = new TipoProducto();
-$aTipoProductos = $tipoproducto->obtenerTodos();
+$aTipoProductos = TipoProducto::obtenerTodos();
 
 include_once "header.php";
 ?>

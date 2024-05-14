@@ -126,7 +126,7 @@ class Venta {
         $mysqli->close();
     }
 
-    public function obtenerTodos() {
+    public static function obtenerTodos() {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "SELECT 
                     idventa,
@@ -156,7 +156,7 @@ class Venta {
         return $aResultado;
     }
 
-    public function obtenerGrilla() {
+    public static function obtenerGrilla() {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "SELECT 
                     ventas.idventa,
@@ -231,7 +231,7 @@ class Venta {
         return $facturacion;
     }
 
-    public function obtenerVentasPorCliente($idcliente) {
+    public static function obtenerVentasPorCliente($idcliente) {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
 
         $sql = "SELECT 
@@ -257,7 +257,7 @@ class Venta {
         return $aResultado;
     }
 
-    public function obtenerVentasPorProducto($idproducto) {
+    public static function obtenerVentasPorProducto($idproducto) {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
 
         $sql = "SELECT 

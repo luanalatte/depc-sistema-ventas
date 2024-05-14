@@ -144,7 +144,7 @@ class Cliente
 
     }
 
-     public function obtenerTodos(){
+     public static function obtenerTodos(){
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "SELECT 
                     idcliente,

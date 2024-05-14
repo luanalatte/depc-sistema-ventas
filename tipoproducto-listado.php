@@ -5,8 +5,7 @@ include_once "entidades/tipoproducto.php";
 
 $pg = "Listado de tipo de productos";
 
-$tipoproducto = new TipoProducto();
-$aTipoProductos = $tipoproducto->obtenerTodos();
+$aTipoProductos = TipoProducto::obtenerTodos();
 
 include_once("header.php"); 
 

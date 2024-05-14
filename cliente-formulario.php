@@ -26,8 +26,7 @@ if ($_POST) {
 
     } else if (isset($_POST["btnBorrar"])) {
         //Si existen ventas asociadas al cliente que se intenta eliminar, muestra mensaje de alerta
-        $venta = new Venta();
-        if ($venta->obtenerVentasPorCliente($cliente->idcliente)) {
+        if (Venta::obtenerVentasPorCliente($cliente->idcliente)) {
             $msg["texto"] = "No se puede eliminar un cliente con ventas asociadas.";
             $msg["codigo"] = "alert-danger";
         } else {
@@ -39,8 +38,7 @@ if ($_POST) {
 
 if (isset($_GET["do"]) && $_GET["do"] == "buscarLocalidad" && $_GET["id"] && $_GET["id"] > 0) {
     $idProvincia = $_GET["id"];
-    $localidad = new Localidad();
-    $aLocalidad = $localidad->obtenerPorProvincia($idProvincia);
+    $aLocalidad = Localidad::obtenerPorProvincia($idProvincia);
     echo json_encode($aLocalidad);
     exit;
 }
@@ -48,8 +46,7 @@ if (isset($_GET["id"]) && $_GET["id"] > 0) {
     $cliente->obtenerPorId();
 }
 
-$provincia = new Provincia();
-$aProvincias = $provincia->obtenerTodos();
+$aProvincias = Provincia::obtenerTodos();
 
 include_once "header.php";
 ?>

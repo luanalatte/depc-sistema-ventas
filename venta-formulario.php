@@ -30,11 +30,8 @@ if (isset($_GET["id"]) && $_GET["id"] > 0) {
     $venta->obtenerPorId();
 }
 
-$cliente = new Cliente();
-$aClientes = $cliente->obtenerTodos();
-
-$producto = new Producto();
-$aProductos = $producto->obtenerTodos();
+$aClientes = Cliente::obtenerTodos();
+$aProductos = Producto::obtenerTodos();
 
 include_once "header.php";
 
