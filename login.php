@@ -13,7 +13,7 @@ if ($_POST) {
 
   if (!$txtUsuario || !$txtClave) {
     $msg = "Ingrese usuario y clave";
-  } else if (($entidadUsario = Usuario::obtenerPorUsuario($txtUsuario)) && $entidadUsario->verificarClave($txtClave)) {
+  } else if (($entidadUsuario = Usuario::obtenerPorUsuario($txtUsuario)) && $entidadUsuario->verificarClave($txtClave)) {
     $_SESSION["nombre"] = $entidadUsuario->nombre;
     header("Location: index.php");
   } else {
