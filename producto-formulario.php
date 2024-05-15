@@ -14,8 +14,9 @@ if ($_POST) {
     if (isset($_POST["btnGuardar"])) {
         if (isset($_FILES["fileImagen"]) && $_FILES["fileImagen"]["error"] == UPLOAD_ERR_OK) {
 
+            $mime = mime_content_type($_FILES["fileImagen"]["tmp_name"]);
             $ext = strtolower(pathinfo($_FILES["fileImagen"]["name"], PATHINFO_EXTENSION));
-            if (in_array($ext, ["jpg", "jpeg", "png", "webp", "gif"])) {
+            if (str_starts_with($mime, "image/") && in_array($ext, ["jpg", "jpeg", "png", "webp", "gif"])) {
                 $nombreImagen = date("Ymdhmsi") . rand(1000, 9999) . "." . $ext;
                 if (!move_uploaded_file($_FILES["fileImagen"]["tmp_name"], "img/productos/$nombreImagen")) {
                     unset($nombreImagen);
