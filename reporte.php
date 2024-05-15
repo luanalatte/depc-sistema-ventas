@@ -1,6 +1,6 @@
 <?php
 
-$fecha = date("Y-m-d");
+$fecha = date("y-m-d");
 
 header("Content-Type: text/csv; charset=utf-8");
 header("Content-Disposition: attachment; filename=reporte-$fecha.csv");
