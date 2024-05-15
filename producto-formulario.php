@@ -25,10 +25,9 @@ if ($_POST) {
         }
 
         if (isset($_GET["id"]) && $_GET["id"] > 0) {
-            // NOTE: cargando desde DB solo para eliminar la imagen?
             $productoOld = new Producto();
             $productoOld->idproducto = $producto->idproducto;
-            $productoOld->obtenerPorId();
+            $productoOld->obtenerImagen();
             if (isset($nombreImagen)) {
                 $productoOld->eliminarImagen();
                 $producto->imagen = $nombreImagen;
@@ -52,9 +51,6 @@ if ($_POST) {
             $msg["texto"] = "No se puede eliminar un producto con ventas asociadas.";
             $msg["codigo"] = "alert-danger";
         } else {
-            // NOTE: cargando desde DB solo para eliminar la imagen?
-            $producto->obtenerPorId();
-            $producto->eliminarImagen();
             $producto->eliminar();
             header("Location: producto-listado.php");
         }
