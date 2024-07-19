@@ -33,8 +33,8 @@ class Venta {
             }
         }
         $this->cantidad = $request["txtCantidad"] ?? "";
-        $this->preciounitario = $request["txtPrecioUnitario"] ?? "";
-        $this->total = $request["txtTotal"] ?? "";
+        $this->preciounitario = Producto::obtenerPrecio($this->fk_idproducto);
+        $this->total = intval($this->cantidad) * $this->preciounitario;
     }
 
     public function insertar() {

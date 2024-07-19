@@ -26,6 +26,13 @@ if ($_POST) {
     }
 }
 
+if (isset($_GET["do"]) && $_GET["do"] == "obtenerProducto" && $_GET["id"] && $_GET["id"] > 0) {
+    $aProducto = [
+        "precio" => Producto::obtenerPrecio($_GET["id"])
+    ];
+    echo json_encode($aProducto);
+    exit;
+}
 if (isset($_GET["id"]) && $_GET["id"] > 0) {
     $venta->obtenerPorId();
 }
@@ -120,7 +127,7 @@ include_once "header.php";
                 </div>
                 <div class="col-6 form-group">
                     <label for="lstProducto">Producto:</label>
-                    <select required name="lstProducto" id="lstProducto" class="form-control">
+                    <select required name="lstProducto" id="lstProducto" class="form-control" onchange="fObtenerProducto()">
                         <option value="" selected disabled>Seleccionar</option>
                         <?php foreach($aProductos as $producto): ?>
                             <option value="<?= $producto->idproducto ?>"<?= $venta->fk_idproducto == $producto->idproducto ? " selected" : "" ?>><?= $producto->nombre ?></option>
@@ -129,15 +136,15 @@ include_once "header.php";
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtPrecioUnitario">Precio unitario:</label>
-                    <input type="number" disabled class="form-control" name="txtPrecioUnitario" id="txtPrecioUnitario" value="<?= $venta->preciounitario ?>">
+                    <input onchange="fCalcularTotal()" type="number" readonly class="form-control" name="txtPrecioUnitario" id="txtPrecioUnitario" value="<?= $venta->preciounitario ?>">
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtCantidad">Cantidad:</label>
-                    <input type="number" required class="form-control" name="txtCantidad" id="txtCantidad" value="<?= $venta->cantidad ?>">
+                    <input onchange="fCalcularTotal()" type="number" required class="form-control" name="txtCantidad" id="txtCantidad" value="<?= $venta->cantidad ?>">
                 </div>
                 <div class="col-6 form-group">
                     <label for="txtTotal">Total:</label>
-                    <input type="number" required class="form-control" name="txtTotal" id="txtTotal" value="<?= $venta->total ?>">
+                    <input type="number" required class="form-control" readonly name="txtTotal" id="txtTotal" value="<?= $venta->total ?>">
                 </div>
             </div>
 
@@ -146,5 +153,31 @@ include_once "header.php";
 
       </div>
       <!-- End of Main Content -->
+<script>
+    function fCalcularTotal() {
+        let cantidad = $('#txtCantidad').val();
+        let precioUnitario = $('#txtPrecioUnitario').val();
 
+        if (cantidad && precioUnitario) {
+            $('#txtTotal').val((Number(cantidad) * Number(precioUnitario)).toFixed(2));
+        } else {
+            $('#txtTotal').val('');
+        }
+    }
+
+    function fObtenerProducto() {
+        idProducto = $("#lstProducto option:selected").val();
+        $.ajax({
+            type: "GET",
+            url: "venta-formulario.php?do=obtenerProducto",
+            data: { id:idProducto },
+            async: true,
+            dataType: "json",
+            success: function (respuesta) {
+                $('#txtPrecioUnitario').val((Number(respuesta.precio ?? 0)).toFixed(2));
+                fCalcularTotal();
+            }
+        });
+    }
+</script>
 <?php include_once "footer.php";?>

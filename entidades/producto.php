@@ -143,6 +143,20 @@ class Producto {
         $mysqli->close();
     }
 
+    public static function obtenerPrecio($idproducto) {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+        $sql = "SELECT precio FROM productos WHERE idproducto = '$idproducto'";
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        if ($fila = $resultado->fetch_assoc()) {
+            return floatval($fila["precio"]);
+        }
+
+        $mysqli->close();
+    }
+
     public static function obtenerTodos() {
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "SELECT 
