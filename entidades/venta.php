@@ -302,6 +302,66 @@ class Venta {
         return $aResultado;
     }
 
+    public static function obtenerGananciasAnuales() {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+
+        $sql = "SELECT
+                    COUNT(idventa) AS nVentas,
+                    SUM(total) AS total,
+                    MONTH(fecha_hora) AS mes
+                    FROM ventas
+                    WHERE YEAR(fecha_hora) = YEAR(CURDATE())
+                    GROUP BY mes";
+
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        $aResultado = [];
+        while($fila = $resultado->fetch_assoc()) {
+            $aResultado[] = [
+                "nVentas" => $fila["nVentas"],
+                "total" => $fila["total"],
+                "mes" => $fila["mes"],
+            ];
+        }
+
+        $mysqli->close();
+        return $aResultado;
+    }
+
+    public static function obtenerGananciasPorProducto() {
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+
+        $sql = "SELECT
+                    COUNT(A.fk_idproducto) AS nVentas,
+                    SUM(A.total) AS total,
+                    B.idproducto AS idproducto,
+                    B.nombre AS producto_nombre
+                    FROM ventas A
+                    INNER JOIN PRODUCTOS B ON A.fk_idproducto = B.idproducto
+                    WHERE YEAR(fecha_hora) = YEAR(CURDATE())
+                    GROUP BY A.fk_idproducto
+                    ORDER BY nVentas DESC";
+
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+
+        $aResultado = [];
+        while($fila = $resultado->fetch_assoc()) {
+            $aResultado[] = [
+                "nVentas" => $fila["nVentas"],
+                "total" => $fila["total"],
+                "idproducto" => $fila["idproducto"],
+                "producto" => $fila["producto_nombre"],
+            ];
+        }
+
+        $mysqli->close();
+        return $aResultado;
+    }
+
 }
 
 ?>

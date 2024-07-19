@@ -8,6 +8,11 @@ $pg = "Inicio";
 $facturacionMensual = number_format(Venta::obtenerFacturacionMensual(date('m'), date('Y')), 2, ",", ".");
 $facturacionAnual = number_format(Venta::obtenerFacturacionAnual(date('Y')), 2, ",", ".");
 
+$gananciasPorMes = Venta::obtenerGananciasAnuales();
+$gananciasPorProducto = Venta::obtenerGananciasPorProducto();
+
+$bsColors = ["primary", "success", "info", "warning", "danger", "secondary"];
+
 include_once("header.php"); 
 
 ?>
@@ -118,15 +123,16 @@ include_once("header.php");
                     <canvas id="myPieChart"></canvas>
                   </div>
                   <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> Direct
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-success"></i> Social
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> Referral
-                    </span>
+                    <?php foreach ($gananciasPorProducto as $i => $ganancias):
+                      $colorIdx = $i;
+                      while ($colorIdx >= count($bsColors)) {
+                        $colorIdx -= count($bsColors);
+                      }
+                      ?>
+                      <span class="mr-2">
+                        <i class="fas fa-circle text-<?= $bsColors[$colorIdx] ?>"></i> <?= $ganancias['producto'] ?>
+                      </span>
+                    <?php endforeach; ?>
                   </div>
                 </div>
               </div>
