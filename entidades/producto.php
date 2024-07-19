@@ -151,6 +151,7 @@ class Producto {
         }
 
         if ($fila = $resultado->fetch_assoc()) {
+            $mysqli->close();
             return floatval($fila["precio"]);
         }
 
